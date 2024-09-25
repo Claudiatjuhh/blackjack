@@ -117,14 +117,16 @@ pick_random_card()
 #Variables
 #Dealer
 currentDealerHand = 0
+dealerHasPassed = False
 
 #Player
 playerBalance = 0
 currentPlayerHand = 0
-hitOrFoldChoice = ""
+playerHasPassed = False
 
 #Game
 gameIsActive = False
+finalCheck = False
 winner = ""
 
 #------
@@ -136,16 +138,58 @@ def decideBetAmount():
 def dealing():
     print("Dealer is dealing")
 
+    # Dealing
+    if playerHasPassed == False:
+        print("Deal to Player and Dealer")
+    elif playerHasPassed == True and currentDealerHand >= 17:
+        print("Don't deal to anyone")
+        finalCheck = True
+    else:
+        print("Deal to dealer only")
+
+
 def givePlayerInput():
-    print("Player decides hit or fold")
-    playerChoice = "" #Can be either Hit or Fold
-    return playerChoice
+    print("Player decides hit or pass")
+
+    #Let player make input before continuing code
+    playerChoice = "" #Can be either Hit or Pass
+
+    if (playerChoice) == "Hit":
+        print ("Player hit")
+    elif (playerChoice) == "Pass":
+        playerHasPassed = True
+    else:
+        return givePlayerInput()
+    
 
 def checkForWinOrLoss():
     print("Check for win or loss")
+
+    if currentPlayerHand <= 21 and currentDealerHand > 21:
+        winner = "player"
+    elif currentPlayerHand > 21 and currentDealerHand <= 22:
+        winner = "dealer"
+    elif finalCheck == True:
+        if currentPlayerHand - currentDealerHand > 0:
+            winner = "player"
+        elif currentPlayerHand - currentDealerHand < 0:
+            winner = "dealer"
+        elif currentPlayerHand - currentDealerHand == 0:
+            winner = "tie"
+
+
+
     if winner == "player":
-        gameIsActive == False
         print("Player won")
+        gameIsActive == False
+    elif winner == "dealer":
+        print ("Dealer won")
+        gameIsActive == False
+    elif winner == "tie":
+        print ("The game has ended in a tie!")
+        gameIsActive == False
+    else:
+        print("Continue Game")
     
 #Game Loop
 decideBetAmount()
@@ -155,8 +199,7 @@ while gameIsActive == True:
     
     checkForWinOrLoss()
 
-    hitOrFoldChoice = givePlayerInput()
-    if (hitOrFoldChoice) == "Hit":
-        dealing()
-    elif (hitOrFoldChoice) == "Fold":
-        checkForWinOrLoss()
+    givePlayerInput()
+
+    
+    
