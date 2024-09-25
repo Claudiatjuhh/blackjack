@@ -147,13 +147,15 @@ def givePlayerInput():
     print("Player decides hit or pass")
 
     #Let player make input before continuing code
-    playerChoice = "" #Can be either Hit or Pass
+    playerChoice = input("Hit or Pass")
+    choice = playerChoice.lower()
 
-    if (playerChoice) == "Hit":
+    if (choice) == "hit":
         print ("Player hit")
-    elif (playerChoice) == "Pass":
+    elif (choice) == "pass":
         playerHasPassed = True
     else:
+        print("invalid input")
         return givePlayerInput()
     
 
