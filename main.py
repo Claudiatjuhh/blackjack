@@ -112,8 +112,6 @@ def pick_random_card():
     for line in card[suit_index].split('\n'):
         print(line)
 
-pick_random_card()
-
 #Variables
 #Dealer
 currentDealerHand = 0
@@ -223,6 +221,8 @@ def checkForWinOrLoss():
     
 #Game Loop
 decideBetAmount()
+
+pick_random_card()
 
 while gameIsActive == True:
     dealing()
