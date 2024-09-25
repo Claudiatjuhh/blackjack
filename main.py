@@ -201,7 +201,6 @@ def dealing():
     elif playerHasPassed == True and currentDealerHand >= 17:
         print("Don't deal to anyone")
         finalCheck = True
-
     else:
         print("Deal to dealer only")
 
@@ -210,7 +209,6 @@ def givePlayerInput():
     print("Player decides hit or pass")
 
     #Let player make input before continuing code
-
     playerChoice = input("Hit or Pass")
     choice = playerChoice.lower()
 
@@ -226,7 +224,6 @@ def givePlayerInput():
 def checkForWinOrLoss():
     print("Check for win or loss")
 
-
     if currentPlayerHand <= 21 and currentDealerHand > 21:
         winner = "player"
     elif currentPlayerHand > 21 and currentDealerHand <= 22:
@@ -239,7 +236,6 @@ def checkForWinOrLoss():
         elif currentPlayerHand - currentDealerHand == 0:
             winner = "tie"
 
-
     if winner == "player":
         print("Player won")
         gameIsActive == False
@@ -250,7 +246,6 @@ def checkForWinOrLoss():
     elif winner == "tie":
         print ("The game has ended in a tie!")
         gameIsActive == False
-
     else:
         print("Continue Game")
     
@@ -266,9 +261,3 @@ while gameIsActive == True:
 
     if (playerHasPassed == False and currentDealerHand < 21 and currentPlayerHand < 21):
         givePlayerInput()
-    
-
-
-
-    
-    
