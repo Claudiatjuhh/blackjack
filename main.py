@@ -264,7 +264,11 @@ while gameIsActive == True:
     
     checkForWinOrLoss()
 
-    givePlayerInput()
+    if (playerHasPassed == False and currentDealerHand < 21 and currentPlayerHand < 21):
+        givePlayerInput()
+    
+
+
 
     
     
