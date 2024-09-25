@@ -118,7 +118,8 @@ currentDealerHand = 0
 dealerHasPassed = False
 
 #Player
-playerBalance = 0
+playerBalance = 1000
+totalBet = 0
 currentPlayerHand = 0
 playerHasPassed = False
 
@@ -130,9 +131,8 @@ winner = ""
 #------
 def decideBetAmount():
     # Player's starting balance
-    playerBalance = 1000
-    totalBet = 0  # Variable to track the player's total bet amount
-    gameIsActive = False  # The game starts inactive
+    global playerBalance
+    global totalBet
     
     # Coin types with their prices
     coinTypes = {
@@ -144,6 +144,7 @@ def decideBetAmount():
     selectedCoins = []  # List to track selected coins
 
     print("\nWelcome to Blackjack! You can choose multiple coins to bet on by entering numbers separated by spaces.")
+    print(f"Your current balance is:{playerBalance}")
     print("1. Red coin (100)")
     print("2. Blue coin (200)")
     print("3. Black coin (500)")
@@ -181,6 +182,13 @@ def decideBetAmount():
             print(f"Your balance is only {playerBalance}. No bet was placed.")
     else:
         print("You need to type 'done' after your selection.")
+
+def recieveProfit(totalBet):
+    global playerBalance
+    profit = totalBet * 2
+    playerBalance += profit
+    print(f"Profit: {profit}")
+    print(f"New balance after adding profit: {playerBalance}")
 
 
 def dealing():
@@ -235,6 +243,7 @@ def checkForWinOrLoss():
     if winner == "player":
         print("Player won")
         gameIsActive == False
+        recieveProfit(totalBet)
     elif winner == "dealer":
         print ("Dealer won")
         gameIsActive == False
