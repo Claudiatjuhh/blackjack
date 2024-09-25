@@ -109,77 +109,82 @@ CARD_VALUES = [
 def pick_random_card():
     suit_index = random.choice([0, 1, 2, 3])
     card = random.choice(CARD_VALUES)
-    for line in card[suit_index].split('\n'):
-        print(line)
+    return card[suit_index]
 
-pick_random_card()
-
-#Variables
-#Dealer
+# Variables
+# Dealer
 currentDealerHand = 0
 
-#Player
-playerBalance = 0
-currentPlayerHand = 0
+# Player
+playerBalance = 100  # Starting balance for the player
+currentPlayerHand = []  # List to hold player's cards
+currentPlayerDeck = []  # Player's current deck
 playerHasPassed = False
 
-#Game
+# Game
 gameIsActive = False
 winner = ""
 
-#------
-def decideBetAmount():
-    print("Test")
+# ------
 
+def decideBetAmount():
+    global gameIsActive
+    print("Test")
     gameIsActive = True
 
 def dealing():
     print("Dealer is dealing")
-
     # Dealing
-    if playerHasPassed == False:
+    if not playerHasPassed:
         print("Deal to Player and Dealer")
     else:
         print("Deal to dealer only")
 
+def display_deck(currentPlayerDeck):
+    print("\nYour current hand:")
+    # Initialize a list to hold each line of the displayed cards
+    card_lines = ["", "", "", "", ""]  # There are 5 lines in each card display
+    for card in currentPlayerDeck:
+        for i, line in enumerate(card.split('\n')):
+            card_lines[i] += line + "  "  # Add space between cards
+    for line in card_lines:
+        print(line)  # Print each line of the cards
 
 def givePlayerInput():
+    global playerHasPassed
     print("Player decides hit or pass")
 
-    #Let player make input before continuing code
-    playerChoice = "" #Can be either Hit or Pass
+    # Let player make input before continuing code
+    playerChoice = input("Type 'hit' to draw a card or 'pass' to end your turn: ").strip().lower()
 
-    if (playerChoice) == "Hit":
-        print ("Player hit")
-    elif (playerChoice) == "Pass":
+    if playerChoice == "hit":
+        print("Player hits")
+        card = pick_random_card()
+        currentPlayerDeck.append(card)  # Add the picked card to the player's deck
+        display_deck(currentPlayerDeck)  # Display the updated deck
+    elif playerChoice == "pass":
         playerHasPassed = True
     else:
-        return givePlayerInput()
-    
+        print("Invalid choice. Try again.")
+        givePlayerInput()  # Repeat until valid input
 
 def checkForWinOrLoss():
+    global gameIsActive
     print("Check for win or loss")
 
-
-
     if winner == "player":
-        gameIsActive == False
+        gameIsActive = False
         print("Player won")
     elif winner == "dealer":
-        gameIsActive == False
-        print ("Dealer won")
+        gameIsActive = False
+        print("Dealer won")
     else:
         print("Continue Game")
-    
-#Game Loop
+
+# Game Loop
 decideBetAmount()
 
-while gameIsActive == True:
+while gameIsActive:
     dealing()
-    
     checkForWinOrLoss()
-
     givePlayerInput()
-
-    
-    
