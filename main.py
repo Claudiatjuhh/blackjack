@@ -1,3 +1,4 @@
+import random
 # Code here
 CARD_VALUES = [
     # Aces
@@ -79,3 +80,10 @@ CARD_VALUES = [
     ]
 ]
 
+def pick_random_card():
+  suit_index = random.choice([0, 1])
+  card = random.choice(CARD_VALUES)
+  for line in card[suit_index].split('\n'):
+    print(line)
+
+pick_random_card()
