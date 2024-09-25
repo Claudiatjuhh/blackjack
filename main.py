@@ -110,6 +110,7 @@ def pick_random_card():
 
 currentDealerHand = 0
 dealerHasPassed = False
+currentDealerDeck = []
 
 
 # Player
@@ -132,6 +133,7 @@ def decideBetAmount():
     # Player's starting balance
     global playerBalance
     global totalBet
+    global gameIsActive
     
     # Coin types with their prices
     coinTypes = {
@@ -193,6 +195,7 @@ def recieveProfit(totalBet):
 
 def dealing():
     global currentScore
+    global gameIsActive
     print("Dealer is dealing")
     # Dealing one card to the player
     card = pick_random_card()
@@ -207,6 +210,7 @@ def dealing():
     currentScore += calculate_card_value(card)  # Update score
     display_deck(currentPlayerDeck)  # Display the initial hand
     print(f"Your current score: {currentScore}")  # Show the current score
+    currentPlayerHand = currentScore
 
 def calculate_card_value(card):
     if "A" in card:  # If the card is an Ace
@@ -223,6 +227,15 @@ def display_deck(currentPlayerDeck):
     print("\nYour current hand:")
     card_lines = ["", "", "", "", ""]  # There are 5 lines in each card display
     for card in currentPlayerDeck:
+        for i, line in enumerate(card.split('\n')):
+            card_lines[i] += line + "  "  # Add space between cards
+    for line in card_lines:
+        print(line)  # Print each line of the cards
+
+def display_dealer_deck(currentDealerDeck):
+    print("\Dealer's current hand:")
+    card_lines = ["", "", "", "", ""]  # There are 5 lines in each card display
+    for card in currentDealerDeck:
         for i, line in enumerate(card.split('\n')):
             card_lines[i] += line + "  "  # Add space between cards
     for line in card_lines:
@@ -259,6 +272,7 @@ def givePlayerInput():
         print(f"Your current score: {currentScore}")  # Display updated score
         if currentScore > 21:  # Check for bust
             print("You busted! Current score exceeded 21.")
+
             return False  # Signal that the game should end
     elif playerChoice == "pass":
         playerHasPassed = True
@@ -283,20 +297,12 @@ def givePlayerInput():
 
 def checkForWinOrLoss():
     global gameIsActive
-    print("Check for win or loss")
-    if currentScore > 21:  # Check for bust
-        gameIsActive = False
-        print("Dealer wins! Player busted.")
-    elif winner == "player":
-        gameIsActive = False
-        print("Player won")
-    elif winner == "dealer":
-        gameIsActive = False
-        print("Dealer won")
-
+    global winner
 
     if currentPlayerHand <= 21 and currentDealerHand > 21:
         winner = "player"
+    elif currentPlayerHand > 21:
+        winner = "dealer"
     elif currentPlayerHand > 21 and currentDealerHand <= 22:
         winner = "dealer"
     elif finalCheck == True:
@@ -309,25 +315,32 @@ def checkForWinOrLoss():
 
     if winner == "player":
         print("Player won")
+        display_dealer_deck()
         gameIsActive == False
         recieveProfit(totalBet)
     elif winner == "dealer":
         print ("Dealer won")
+        display_dealer_deck()
         gameIsActive == False
     elif winner == "tie":
         print ("The game has ended in a tie!")
+        display_dealer_deck()
         gameIsActive == False
     else:
         print("Continue Game")
 
+def DealerHand():
+    currentDealerDeck.append(pick_random_card())   
+
 # Game Loop
 decideBetAmount()
 
-while gameIsActive:
+while gameIsActive == True:
     if(currentPlayerDeck == []):
       dealing()
     if not givePlayerInput():  # Check if the player busted after hitting
         break  # Exit loop if player busts
+    DealerHand()
     checkForWinOrLoss()
-    if (playerHasPassed == False and currentDealerHand < 21 and currentPlayerHand < 21):
+    if (playerHasPassed == False and currentPlayerHand < 21 and gameIsActive == True):
         givePlayerInput()
