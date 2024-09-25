@@ -132,6 +132,7 @@ def decideBetAmount():
     # Player's starting balance
     global playerBalance
     global totalBet
+    global gameIsActive
     
     # Coin types with their prices
     coinTypes = {
@@ -283,17 +284,7 @@ def givePlayerInput():
 
 def checkForWinOrLoss():
     global gameIsActive
-    print("Check for win or loss")
-    if currentScore > 21:  # Check for bust
-        gameIsActive = False
-        print("Dealer wins! Player busted.")
-    elif winner == "player":
-        gameIsActive = False
-        print("Player won")
-    elif winner == "dealer":
-        gameIsActive = False
-        print("Dealer won")
-
+    global winner
 
     if currentPlayerHand <= 21 and currentDealerHand > 21:
         winner = "player"
