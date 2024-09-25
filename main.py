@@ -112,26 +112,84 @@ def pick_random_card():
     for line in card[suit_index].split('\n'):
         print(line)
 
-pick_random_card()
-
 #Variables
 #Dealer
 currentDealerHand = 0
+dealerHasPassed = False
 
 #Player
-playerBalance = 0
+playerBalance = 1000
+totalBet = 0
 currentPlayerHand = 0
 playerHasPassed = False
 
 #Game
 gameIsActive = False
+finalCheck = False
 winner = ""
 
 #------
 def decideBetAmount():
-    print("Test")
+    # Player's starting balance
+    global playerBalance
+    global totalBet
+    
+    # Coin types with their prices
+    coinTypes = {
+        "Red": 100,   # Red coin costs 100
+        "Blue": 200,  # Blue coin costs 200
+        "Black": 500  # Black coin costs 500
+    }
+    
+    selectedCoins = []  # List to track selected coins
 
-    gameIsActive = True
+    print("\nWelcome to Blackjack! You can choose multiple coins to bet on by entering numbers separated by spaces.")
+    print(f"Your current balance is:{playerBalance}")
+    print("1. Red coin (100)")
+    print("2. Blue coin (200)")
+    print("3. Black coin (500)")
+    print("Type 'done' after your selection.")
+    # Get choices from the user (once)
+    choice = input("\nEnter your choices (e.g., '1 2 3' or '1 1 2') followed by 'done' to finish: ").split()
+
+    if 'done' in choice:
+        choice.remove('done')  # Remove 'done' from the list of choices
+
+        # Calculate the total bet based on the choices
+        for coin in choice:
+            if coin == "1":
+                selectedCoins.append("Red")
+                totalBet += coinTypes["Red"]
+            elif coin == "2":
+                selectedCoins.append("Blue")
+                totalBet += coinTypes["Blue"]
+            elif coin == "3":
+                selectedCoins.append("Black")
+                totalBet += coinTypes["Black"]
+            else:
+                print(f"Invalid choice '{coin}', skipping...")
+
+        # Check if player has enough balance for the total bet
+        if playerBalance >= totalBet:
+            playerBalance -= totalBet  # Deduct the total bet from the player's balance
+            gameIsActive = True  # Set the game as active
+            print("\nBetting complete.")
+            print(f"You selected: {', '.join(selectedCoins)}")
+            print(f"Total bet: {totalBet}")
+            print(f"Remaining balance: {playerBalance}")
+        else:
+            print(f"\nSorry, you do not have enough balance for this total bet of {totalBet}.")
+            print(f"Your balance is only {playerBalance}. No bet was placed.")
+    else:
+        print("You need to type 'done' after your selection.")
+
+def recieveProfit(totalBet):
+    global playerBalance
+    profit = totalBet * 2
+    playerBalance += profit
+    print(f"Profit: {profit}")
+    print(f"New balance after adding profit: {playerBalance}")
+
 
 def dealing():
     print("Dealer is dealing")
@@ -139,6 +197,10 @@ def dealing():
     # Dealing
     if playerHasPassed == False:
         print("Deal to Player and Dealer")
+
+    elif playerHasPassed == True and currentDealerHand >= 17:
+        print("Don't deal to anyone")
+        finalCheck = True
     else:
         print("Deal to dealer only")
 
@@ -147,37 +209,55 @@ def givePlayerInput():
     print("Player decides hit or pass")
 
     #Let player make input before continuing code
-    playerChoice = "" #Can be either Hit or Pass
+    playerChoice = input("Hit or Pass")
+    choice = playerChoice.lower()
 
-    if (playerChoice) == "Hit":
+    if (choice) == "hit":
         print ("Player hit")
-    elif (playerChoice) == "Pass":
+    elif (choice) == "pass":
         playerHasPassed = True
     else:
+        print("invalid input")
         return givePlayerInput()
     
 
 def checkForWinOrLoss():
     print("Check for win or loss")
 
-
+    if currentPlayerHand <= 21 and currentDealerHand > 21:
+        winner = "player"
+    elif currentPlayerHand > 21 and currentDealerHand <= 22:
+        winner = "dealer"
+    elif finalCheck == True:
+        if currentPlayerHand - currentDealerHand > 0:
+            winner = "player"
+        elif currentPlayerHand - currentDealerHand < 0:
+            winner = "dealer"
+        elif currentPlayerHand - currentDealerHand == 0:
+            winner = "tie"
 
     if winner == "player":
-        gameIsActive == False
         print("Player won")
-    elif winner == "dealer":
         gameIsActive == False
+        recieveProfit(totalBet)
+    elif winner == "dealer":
         print ("Dealer won")
+        gameIsActive == False
+    elif winner == "tie":
+        print ("The game has ended in a tie!")
+        gameIsActive == False
     else:
         print("Continue Game")
     
 #Game Loop
 decideBetAmount()
 
+pick_random_card()
+
 while gameIsActive == True:
     dealing()
     
     checkForWinOrLoss()
 
-    givePlayerInput()
-
+    if (playerHasPassed == False and currentDealerHand < 21 and currentPlayerHand < 21):
+        givePlayerInput()
