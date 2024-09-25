@@ -8,7 +8,6 @@ CARD_VALUES = [
         ".-------.\n|A      |\n|   ♦   |\n|      A|\n'-------'",  # Ace of Diamonds
         ".-------.\n|A      |\n|   ♣   |\n|      A|\n'-------'"   # Ace of Clubs
     ],
-
     # 2s
     [
         ".-------.\n|2      |\n|   ♠   |\n|      2|\n'-------'",  # 2 of Spades
@@ -16,7 +15,6 @@ CARD_VALUES = [
         ".-------.\n|2      |\n|   ♦   |\n|      2|\n'-------'",  # 2 of Diamonds
         ".-------.\n|2      |\n|   ♣   |\n|      2|\n'-------'"   # 2 of Clubs
     ],
-
     # 3s
     [
         ".-------.\n|3      |\n|   ♠   |\n|      3|\n'-------'",  # 3 of Spades
@@ -24,7 +22,6 @@ CARD_VALUES = [
         ".-------.\n|3      |\n|   ♦   |\n|      3|\n'-------'",  # 3 of Diamonds
         ".-------.\n|3      |\n|   ♣   |\n|      3|\n'-------'"   # 3 of Clubs
     ],
-
     # 4s
     [
         ".-------.\n|4      |\n|   ♠   |\n|      4|\n'-------'",  # 4 of Spades
@@ -32,7 +29,6 @@ CARD_VALUES = [
         ".-------.\n|4      |\n|   ♦   |\n|      4|\n'-------'",  # 4 of Diamonds
         ".-------.\n|4      |\n|   ♣   |\n|      4|\n'-------'"   # 4 of Clubs
     ],
-
     # 5s
     [
         ".-------.\n|5      |\n|   ♠   |\n|      5|\n'-------'",  # 5 of Spades
@@ -40,7 +36,6 @@ CARD_VALUES = [
         ".-------.\n|5      |\n|   ♦   |\n|      5|\n'-------'",  # 5 of Diamonds
         ".-------.\n|5      |\n|   ♣   |\n|      5|\n'-------'"   # 5 of Clubs
     ],
-
     # 6s
     [
         ".-------.\n|6      |\n|   ♠   |\n|      6|\n'-------'",  # 6 of Spades
@@ -48,7 +43,6 @@ CARD_VALUES = [
         ".-------.\n|6      |\n|   ♦   |\n|      6|\n'-------'",  # 6 of Diamonds
         ".-------.\n|6      |\n|   ♣   |\n|      6|\n'-------'"   # 6 of Clubs
     ],
-
     # 7s
     [
         ".-------.\n|7      |\n|   ♠   |\n|      7|\n'-------'",  # 7 of Spades
@@ -56,7 +50,6 @@ CARD_VALUES = [
         ".-------.\n|7      |\n|   ♦   |\n|      7|\n'-------'",  # 7 of Diamonds
         ".-------.\n|7      |\n|   ♣   |\n|      7|\n'-------'"   # 7 of Clubs
     ],
-
     # 8s
     [
         ".-------.\n|8      |\n|   ♠   |\n|      8|\n'-------'",  # 8 of Spades
@@ -64,7 +57,6 @@ CARD_VALUES = [
         ".-------.\n|8      |\n|   ♦   |\n|      8|\n'-------'",  # 8 of Diamonds
         ".-------.\n|8      |\n|   ♣   |\n|      8|\n'-------'"   # 8 of Clubs
     ],
-
     # 9s
     [
         ".-------.\n|9      |\n|   ♠   |\n|      9|\n'-------'",  # 9 of Spades
@@ -72,7 +64,6 @@ CARD_VALUES = [
         ".-------.\n|9      |\n|   ♦   |\n|      9|\n'-------'",  # 9 of Diamonds
         ".-------.\n|9      |\n|   ♣   |\n|      9|\n'-------'"   # 9 of Clubs
     ],
-
     # 10s
     [
         ".-------.\n|10     |\n|   ♠   |\n|     10|\n'-------'",  # 10 of Spades
@@ -80,7 +71,6 @@ CARD_VALUES = [
         ".-------.\n|10     |\n|   ♦   |\n|     10|\n'-------'",  # 10 of Diamonds
         ".-------.\n|10     |\n|   ♣   |\n|     10|\n'-------'"   # 10 of Clubs
     ],
-
     # Jacks
     [
         ".-------.\n|J      |\n|   ♠   |\n|      J|\n'-------'",  # Jack of Spades
@@ -88,7 +78,6 @@ CARD_VALUES = [
         ".-------.\n|J      |\n|   ♦   |\n|      J|\n'-------'",  # Jack of Diamonds
         ".-------.\n|J      |\n|   ♣   |\n|      J|\n'-------'"   # Jack of Clubs
     ],
-
     # Queens
     [
         ".-------.\n|Q      |\n|   ♠   |\n|      Q|\n'-------'",  # Queen of Spades
@@ -96,7 +85,6 @@ CARD_VALUES = [
         ".-------.\n|Q      |\n|   ♦   |\n|      Q|\n'-------'",  # Queen of Diamonds
         ".-------.\n|Q      |\n|   ♣   |\n|      Q|\n'-------'"   # Queen of Clubs
     ],
-
     # Kings
     [
         ".-------.\n|K      |\n|   ♠   |\n|      K|\n'-------'",  # King of Spades
@@ -117,8 +105,8 @@ currentDealerHand = 0
 
 # Player
 playerBalance = 100  # Starting balance for the player
-currentPlayerHand = []  # List to hold player's cards
 currentPlayerDeck = []  # Player's current deck
+currentScore = 0  # Current score of the player
 playerHasPassed = False
 
 # Game
@@ -133,22 +121,45 @@ def decideBetAmount():
     gameIsActive = True
 
 def dealing():
+    global currentScore
     print("Dealer is dealing")
-    # Dealing
-    if not playerHasPassed:
-        print("Deal to Player and Dealer")
-    else:
-        print("Deal to dealer only")
+    # Dealing one card to the player
+    card = pick_random_card()
+    currentPlayerDeck.append(card)  # Add the picked card to the player's deck
+    currentScore += calculate_card_value(card)  # Update score
+    display_deck(currentPlayerDeck)  # Display the initial hand
+    print(f"Your current score: {currentScore}")  # Show the current score
+
+    # Dealing one more card to the player
+    card = pick_random_card()
+    currentPlayerDeck.append(card)  # Add the picked card to the player's deck
+    currentScore += calculate_card_value(card)  # Update score
+    display_deck(currentPlayerDeck)  # Display the initial hand
+    print(f"Your current score: {currentScore}")  # Show the current score
+
+def calculate_card_value(card):
+    if "A" in card:  # If the card is an Ace
+        return 11 if currentScore + 11 <= 21 else 1  # Choose 11 if it doesn't bust
+    if "K" in card or "Q" in card or "J" in card or "10" in card:  # 10, J, Q, K
+        return 10
+    # Extract the numeric value for 2-9
+    for char in card:
+        if char.isdigit():
+            return int(char)
+    return 0
 
 def display_deck(currentPlayerDeck):
     print("\nYour current hand:")
-    # Initialize a list to hold each line of the displayed cards
     card_lines = ["", "", "", "", ""]  # There are 5 lines in each card display
     for card in currentPlayerDeck:
         for i, line in enumerate(card.split('\n')):
             card_lines[i] += line + "  "  # Add space between cards
     for line in card_lines:
         print(line)  # Print each line of the cards
+
+def update_current_score():
+    global currentScore
+    currentScore = sum(calculate_card_value(card) for card in currentPlayerDeck)
 
 def givePlayerInput():
     global playerHasPassed
@@ -161,18 +172,27 @@ def givePlayerInput():
         print("Player hits")
         card = pick_random_card()
         currentPlayerDeck.append(card)  # Add the picked card to the player's deck
+        update_current_score()  # Update current score
         display_deck(currentPlayerDeck)  # Display the updated deck
+        print(f"Your current score: {currentScore}")  # Display updated score
+        if currentScore > 21:  # Check for bust
+            print("You busted! Current score exceeded 21.")
+            return False  # Signal that the game should end
     elif playerChoice == "pass":
         playerHasPassed = True
     else:
         print("Invalid choice. Try again.")
         givePlayerInput()  # Repeat until valid input
 
+    return True  # Continue the game if player hasn't busted or passed
+
 def checkForWinOrLoss():
     global gameIsActive
     print("Check for win or loss")
-
-    if winner == "player":
+    if currentScore > 21:  # Check for bust
+        gameIsActive = False
+        print("Dealer wins! Player busted.")
+    elif winner == "player":
         gameIsActive = False
         print("Player won")
     elif winner == "dealer":
@@ -185,6 +205,8 @@ def checkForWinOrLoss():
 decideBetAmount()
 
 while gameIsActive:
-    dealing()
+    if(currentPlayerDeck == []):
+      dealing()
+    if not givePlayerInput():  # Check if the player busted after hitting
+        break  # Exit loop if player busts
     checkForWinOrLoss()
-    givePlayerInput()
