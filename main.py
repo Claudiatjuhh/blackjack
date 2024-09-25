@@ -112,8 +112,6 @@ def pick_random_card():
     for line in card[suit_index].split('\n'):
         print(line)
 
-pick_random_card()
-
 #Variables
 #Dealer
 currentDealerHand = 0
@@ -129,9 +127,59 @@ winner = ""
 
 #------
 def decideBetAmount():
-    print("Test")
+    # Player's starting balance
+    playerBalance = 1000
+    totalBet = 0  # Variable to track the player's total bet amount
+    gameIsActive = False  # The game starts inactive
+    
+    # Coin types with their prices
+    coinTypes = {
+        "Red": 100,   # Red coin costs 100
+        "Blue": 200,  # Blue coin costs 200
+        "Black": 500  # Black coin costs 500
+    }
+    
+    selectedCoins = []  # List to track selected coins
 
-    gameIsActive = True
+    print("\nWelcome to Blackjack! You can choose multiple coins to bet on by entering numbers separated by spaces.")
+    print("1. Red coin (100)")
+    print("2. Blue coin (200)")
+    print("3. Black coin (500)")
+    print("Type 'done' after your selection.")
+    # Get choices from the user (once)
+    choice = input("\nEnter your choices (e.g., '1 2 3' or '1 1 2') followed by 'done' to finish: ").split()
+
+    if 'done' in choice:
+        choice.remove('done')  # Remove 'done' from the list of choices
+
+        # Calculate the total bet based on the choices
+        for coin in choice:
+            if coin == "1":
+                selectedCoins.append("Red")
+                totalBet += coinTypes["Red"]
+            elif coin == "2":
+                selectedCoins.append("Blue")
+                totalBet += coinTypes["Blue"]
+            elif coin == "3":
+                selectedCoins.append("Black")
+                totalBet += coinTypes["Black"]
+            else:
+                print(f"Invalid choice '{coin}', skipping...")
+
+        # Check if player has enough balance for the total bet
+        if playerBalance >= totalBet:
+            playerBalance -= totalBet  # Deduct the total bet from the player's balance
+            gameIsActive = True  # Set the game as active
+            print("\nBetting complete.")
+            print(f"You selected: {', '.join(selectedCoins)}")
+            print(f"Total bet: {totalBet}")
+            print(f"Remaining balance: {playerBalance}")
+        else:
+            print(f"\nSorry, you do not have enough balance for this total bet of {totalBet}.")
+            print(f"Your balance is only {playerBalance}. No bet was placed.")
+    else:
+        print("You need to type 'done' after your selection.")
+
 
 def dealing():
     print("Dealer is dealing")
@@ -175,6 +223,8 @@ def checkForWinOrLoss():
     
 #Game Loop
 decideBetAmount()
+
+pick_random_card()
 
 while gameIsActive == True:
     dealing()
