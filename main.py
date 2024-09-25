@@ -115,6 +115,7 @@ def pick_random_card():
 #Variables
 #Dealer
 currentDealerHand = 0
+dealerHasPassed = False
 
 #Player
 playerBalance = 0
@@ -123,6 +124,7 @@ playerHasPassed = False
 
 #Game
 gameIsActive = False
+finalCheck = False
 winner = ""
 
 #------
@@ -187,6 +189,11 @@ def dealing():
     # Dealing
     if playerHasPassed == False:
         print("Deal to Player and Dealer")
+
+    elif playerHasPassed == True and currentDealerHand >= 17:
+        print("Don't deal to anyone")
+        finalCheck = True
+
     else:
         print("Deal to dealer only")
 
@@ -195,6 +202,7 @@ def givePlayerInput():
     print("Player decides hit or pass")
 
     #Let player make input before continuing code
+
     playerChoice = input("Hit or Pass")
     choice = playerChoice.lower()
 
@@ -211,13 +219,29 @@ def checkForWinOrLoss():
     print("Check for win or loss")
 
 
+    if currentPlayerHand <= 21 and currentDealerHand > 21:
+        winner = "player"
+    elif currentPlayerHand > 21 and currentDealerHand <= 22:
+        winner = "dealer"
+    elif finalCheck == True:
+        if currentPlayerHand - currentDealerHand > 0:
+            winner = "player"
+        elif currentPlayerHand - currentDealerHand < 0:
+            winner = "dealer"
+        elif currentPlayerHand - currentDealerHand == 0:
+            winner = "tie"
+
 
     if winner == "player":
-        gameIsActive == False
         print("Player won")
-    elif winner == "dealer":
         gameIsActive == False
+    elif winner == "dealer":
         print ("Dealer won")
+        gameIsActive == False
+    elif winner == "tie":
+        print ("The game has ended in a tie!")
+        gameIsActive == False
+
     else:
         print("Continue Game")
     
